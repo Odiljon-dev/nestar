@@ -17,8 +17,8 @@ import { DatabaseModule } from './database/database.module';
 			uploads: false,
 			autoSchemaFile: true,
 		}),
-		ComponentsModule,
-		DatabaseModule,
+		ComponentsModule, // HTTP
+		DatabaseModule, // TCP connextion bolgani uchun
 	],
 	controllers: [AppController],
 	providers: [AppService, AppResolver],
