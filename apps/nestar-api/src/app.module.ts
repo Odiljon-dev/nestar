@@ -8,6 +8,7 @@ import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 
+/** Bu yerda PROPERTYLAR birlashtirib turadi  **/
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
