@@ -21,3 +21,17 @@ function printNumbers() {
 }
 
 printNumbers();
+//////////////////////////////////////////////////////
+// TASK_ZM
+function reverseInteger(num) {
+	return Number(
+		num
+			.toString()
+			.split('')
+			.map((item, index, arr) => arr[arr.length - 1 - index])
+			.join(''),
+	);
+}
+
+console.log(reverseInteger(123456789));
+console.log(reverseInteger(987654321));
