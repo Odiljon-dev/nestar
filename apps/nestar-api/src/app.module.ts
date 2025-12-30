@@ -7,6 +7,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
+import { T } from './types/common';
 
 /** Bu yerda PROPERTYLAR birlashtirib turadi  **/
 @Module({
@@ -18,6 +19,15 @@ import { DatabaseModule } from './database/database.module';
 			playground: true,
 			uploads: false,
 			autoSchemaFile: true,
+			formatError: (error: T) => {
+				const graphQLFormattedError = {
+					code: error?.extensions.code,
+					message:
+						error?.extensions?.exception?.response?.message || error?.extensions?.response?.message || error?.message,
+				};
+				console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);
+				return graphQLFormattedError;
+			},
 		}),
 		ComponentsModule, // HTTP barcha mantiqlarni bitta joyda saqlaydi!
 		DatabaseModule, // TCP connection bolgani uchun!
