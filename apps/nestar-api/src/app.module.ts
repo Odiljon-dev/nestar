@@ -11,17 +11,18 @@ import { DatabaseModule } from './database/database.module';
 /** Bu yerda PROPERTYLAR birlashtirib turadi  **/
 @Module({
 	imports: [
-		ConfigModule.forRoot(),
+		ConfigModule.forRoot(), // envni hamma joyda ishlatadi
 		GraphQLModule.forRoot({
-			driver: ApolloDriver,
+			// GraphQl orqali o'zimizga kerakli malumotni olishimiz mumkin!
+			driver: ApolloDriver, // GraphQl orqali bir vaqtni o'zida bir nechta enpoinyga request jo'natish mumkin!
 			playground: true,
 			uploads: false,
 			autoSchemaFile: true,
 		}),
-		ComponentsModule, // HTTP
-		DatabaseModule, // TCP connextion bolgani uchun
+		ComponentsModule, // HTTP barcha mantiqlarni bitta joyda saqlaydi!
+		DatabaseModule, // TCP connection bolgani uchun!
 	],
-	controllers: [AppController],
-	providers: [AppService, AppResolver],
+	controllers: [AppController], //RestApi!
+	providers: [AppService, AppResolver], //GraphQl-Api!
 })
 export class AppModule {}

@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 /** Monorepo module bir nechta serverlarni bitta repositerda saqlanadi **/
 /**NestJS ni ingrinendlari => RESOLVER & MODULES & SERVIECES & GUARDS & PIPES & INTERCEPTOR**/
@@ -8,6 +9,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule); // Express + NestJs
+	app.useGlobalPipes(new ValidationPipe());
 	await app.listen(process.env.PORT_API ?? 3000);
 }
 bootstrap();
