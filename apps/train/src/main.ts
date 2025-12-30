@@ -35,3 +35,19 @@ function reverseInteger(num) {
 
 console.log(reverseInteger(123456789));
 console.log(reverseInteger(987654321));
+///////////////////////////////////////////////////
+// TASK_ZL
+function stringToKebab(string) {
+	string = string.toLowerCase();
+
+	let result = '';
+
+	for (let i = 0; i < string.length; i++) {
+		if (string[i] === ' ') result += '-';
+		else result += string[i];
+	}
+
+	return result;
+}
+
+console.log(stringToKebab('I love Kebab'));
