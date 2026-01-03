@@ -10,6 +10,9 @@ import { AuthService } from '../auth/auth/auth.service';
 
 @Injectable()
 export class MemberService {
+	updateMemberByAdmin(): string | PromiseLike<string> {
+		throw new Error('Method not implemented.');
+	}
 	constructor(
 		@InjectModel('Member') private readonly memberModel: Model<Member>,
 		private authService: AuthService,
@@ -56,4 +59,14 @@ export class MemberService {
 	public async getMember(): Promise<string> {
 		return ' getMember executed!';
 	}
+
+	public async getAllMembersByAdmin(): Promise<string> {
+		return ' getAllMembersByAdmin executed!';
+	}
+	public async updateMemberByIdAdmin(): Promise<string> {
+		return ' updateMemberByIdAdmin executed!';
+	}
+
+
+	
 }
