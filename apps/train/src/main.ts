@@ -51,3 +51,17 @@ function stringToKebab(string) {
 }
 
 console.log(stringToKebab('I love Kebab'));
+///////////////////////////////////////////////
+// TASK_ZN
+function rotateArray(array, n) {
+	const len = array.length;
+
+	return array.reduce((acc, _, i) => {
+		acc.push(array[(i + n) % len]);
+		return acc;
+	}, []);
+}
+
+
+
+console.log(rotateArray([1, 2, 3, 4, 5, 6], 3));
