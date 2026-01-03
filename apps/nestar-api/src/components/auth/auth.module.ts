@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './auth.service';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 		HttpModule,
 		JwtModule.register({
 			secret: `${process.env.SECRET_TOKEN}`,
-			signOptions: {expiresIn: '30d'},
+			signOptions: { expiresIn: '30d' },
 		}),
 	],
 	providers: [AuthService],

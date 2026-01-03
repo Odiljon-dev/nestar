@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { LoggingInterceptor } from './libs/interceptor/Logging.interceptor';
+import { LoggingInterceptor } from './interceptor/Logging.interceptor';
 
 /** Monorepo module bir nechta serverlarni bitta repositerda saqlanadi **/
 /**NestJS ni ingrinendlari => RESOLVER & MODULES & SERVIECES & GUARDS & PIPES & INTERCEPTOR**/

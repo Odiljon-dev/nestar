@@ -6,13 +6,10 @@ import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
 import { blob } from 'stream/consumers';
-import { AuthService } from '../auth/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MemberService {
-	updateMemberByAdmin(): string | PromiseLike<string> {
-		throw new Error('Method not implemented.');
-	}
 	constructor(
 		@InjectModel('Member') private readonly memberModel: Model<Member>,
 		private authService: AuthService,
@@ -45,7 +42,6 @@ export class MemberService {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
 
-
 		const isMatch = await this.authService.comparePasswords(input.memberPassword, response.memberPassword);
 		if (!isMatch) throw new InternalServerErrorException(Message.WRONG_PASSWORD);
 		response.accessToken = await this.authService.createToken(response);
@@ -66,7 +62,4 @@ export class MemberService {
 	public async updateMemberByIdAdmin(): Promise<string> {
 		return ' updateMemberByIdAdmin executed!';
 	}
-
-
-	
 }
