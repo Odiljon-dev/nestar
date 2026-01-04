@@ -9,7 +9,7 @@ import { LoggingInterceptor } from './interceptor/Logging.interceptor';
 /** Bu yerda asosiy module APP MODULE hisoblanadi **/
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule); // Express + NestJs
+	const app = await NestFactory.create(AppModule); //  app => Express + NestJsni qorishmasi
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalInterceptors(new LoggingInterceptor());
 	await app.listen(process.env.PORT_API ?? 3000);

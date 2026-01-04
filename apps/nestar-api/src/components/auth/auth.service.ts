@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { Member } from '../member/member';
+import { Member } from '../../libs/dto/member/member';
 import { JwtService } from '@nestjs/jwt';
 import { T } from 'apps/nestar-api/src/types/common';
 import { shapeIntoMongoObjectId } from '../../libs/config';
