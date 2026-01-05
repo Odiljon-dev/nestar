@@ -62,6 +62,19 @@ function rotateArray(array, n) {
 	}, []);
 }
 
-
-
 console.log(rotateArray([1, 2, 3, 4, 5, 6], 3));
+////////////////////////////////////////////////////
+// TASK
+function areArraysEqual(a, b) {
+	let result = true;
+
+	a.map((item) => {
+		if (!b.includes(item)) result = false;
+	});
+
+	return result;
+}
+
+console.log(areArraysEqual([1, 2, 3], [3, 1, 2]));
+console.log(areArraysEqual([1, 2, 3], [3, 1, 2, 1]));
+console.log(areArraysEqual([1, 2, 3], [4, 1, 2]));
