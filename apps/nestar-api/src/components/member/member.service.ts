@@ -138,7 +138,7 @@ export class MemberService {
 
 		return result[0];
 	}
-	public async updateMemberByIdAdmin(input: MemberUpdate): Promise<Member> {
+	public async updateMemberByAdmin(input: MemberUpdate): Promise<Member> {
 		const result: Member = await this.memberModel.findByIdAndUpdate({ _id: input._id }, input, { new: true }).exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
 		return result;
