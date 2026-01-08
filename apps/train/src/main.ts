@@ -78,3 +78,22 @@ function areArraysEqual(a, b) {
 console.log(areArraysEqual([1, 2, 3], [3, 1, 2]));
 console.log(areArraysEqual([1, 2, 3], [3, 1, 2, 1]));
 console.log(areArraysEqual([1, 2, 3], [4, 1, 2]));
+//////////////////////////////////////////////////////
+// TASK
+function groupAnagrams(str) {
+  const map = new Map();
+
+  for (let word of str) {
+    const key = word.split('').sort().join('');
+
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+
+    map.get(key).push(word);
+  }
+
+  return Array.from(map.values());
+}
+
+console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
