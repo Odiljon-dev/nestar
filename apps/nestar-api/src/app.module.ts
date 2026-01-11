@@ -9,16 +9,17 @@ import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 import { T } from './types/common';
 
+// Module markaziy module hisoblanadi
 /** Bu yerda PROPERTYLAR birlashtirib turadi  **/
 @Module({
 	imports: [
 		ConfigModule.forRoot(), // envni hamma joyda ishlatadi
 		GraphQLModule.forRoot({
 			// GraphQl orqali o'zimizga kerakli malumotni olishimiz mumkin!
-			driver: ApolloDriver, // GraphQl orqali bir vaqtni o'zida bir nechta enpoinyga request jo'natish mumkin!
-			playground: true,
-			uploads: false,
-			autoSchemaFile: true,
+			driver: ApolloDriver, // GraphQl orqali bir vaqtni o'zida bir nechta enpointyga request jo'natish mumkin!
+			playground: true, // Documention avtomatic qurib beradi
+			uploads: false, // Bunda biz agar file upload bo'ladigan bo'lsa uni o'chiramiz
+			autoSchemaFile: true, // Bu GraphQL schemani avtomatik generatsiya qiladi
 			formatError: (error: T) => {
 				const graphQLFormattedError = {
 					code: error?.extensions.code,
@@ -29,6 +30,7 @@ import { T } from './types/common';
 				return graphQLFormattedError;
 			},
 		}),
+		// COMPONENT HAMDA DATABASE MODULENI ROUTING QILMAGANIMIZNI SABABI BU BIZNING FILE MODULE BO'LGANI UCHUN
 		ComponentsModule, // HTTP barcha mantiqlarni bitta joyda saqlaydi!
 		DatabaseModule, // TCP connection bolgani uchun!
 	],

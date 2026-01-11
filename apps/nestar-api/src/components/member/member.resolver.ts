@@ -18,12 +18,13 @@ import { Message } from '../../libs/enums/common.enum';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) {}
+	constructor(private readonly memberService: MemberService) {} // DEPENDECIE IJECTION
 
-	@Mutation(() => Member)
+	@Mutation(() => Member) // GRAPHQL MEMBER MALUMOT QAYTARISH
 	public async signup(@Args('input') input: MemberInput): Promise<Member> {
+		// BU YERDAGI MEMBER METHOD UCHUN MALUMOT QAYTARISH
 		console.log('Mutation: signup');
-		return this.memberService.signup(input);
+		return await this.memberService.signup(input);
 	}
 
 	/** PIPE GUARD INTERCEPTOR(req) **/
@@ -99,70 +100,70 @@ export class MemberResolver {
 
 	/** UPLOADER **/
 
-@UseGuards(AuthGuard)
-@Mutation((returns) => String)
-public async imageUploader(
-	@Args({ name: 'file', type: () => GraphQLUpload })
-{ createReadStream, filename, mimetype }: FileUpload,
-@Args('target') target: String,
-): Promise<string> {
-	console.log('Mutation: imageUploader');
+	@UseGuards(AuthGuard)
+	@Mutation((returns) => String)
+	public async imageUploader(
+		@Args({ name: 'file', type: () => GraphQLUpload }) 
+		{ createReadStream, filename, mimetype }: FileUpload,
+		@Args('target') target: String,
+	): Promise<string> {
+		console.log('Mutation: imageUploader');
 
-	if (!filename) throw new Error(Message.UPLOAD_FAILED);
-const validMime = validMimeTypes.includes(mimetype);
-if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
+		if (!filename) throw new Error(Message.UPLOAD_FAILED);
+		const validMime = validMimeTypes.includes(mimetype);
+		if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
 
-const imageName = getSerialForImage(filename);
-const url = `uploads/${target}/${imageName}`;
-const stream = createReadStream();
+		const imageName = getSerialForImage(filename);
+		const url = `uploads/${target}/${imageName}`;
+		const stream = createReadStream();
 
-const result = await new Promise((resolve, reject) => {
-	stream
-		.pipe(createWriteStream(url))
-		.on('finish', async () => resolve(true))
-		.on('error', () => reject(false));
-});
-if (!result) throw new Error(Message.UPLOAD_FAILED);
+		const result = await new Promise((resolve, reject) => {
+			stream
+				.pipe(createWriteStream(url))
+				.on('finish', async () => resolve(true))
+				.on('error', () => reject(false));
+		});
+		if (!result) throw new Error(Message.UPLOAD_FAILED);
 
-return url;
-}
+		return url;
+	}
 
-@UseGuards(AuthGuard)
-@Mutation((returns) => [String])
-public async imagesUploader(
-	@Args('files', { type: () => [GraphQLUpload] })
-files: Promise<FileUpload>[],
-@Args('target') target: String,
-): Promise<string[]> {
-	console.log('Mutation: imagesUploader');
+	@UseGuards(AuthGuard)
+	@Mutation((returns) => [String])
+	public async imagesUploader(
+		@Args('files', { type: () => [GraphQLUpload] })
+		files: Promise<FileUpload>[],
+		@Args('target') target: String,
+	): Promise<string[]> {
+		console.log('Mutation: imagesUploader');
 
-	const uploadedImages = [];
-	const promisedList = files.map(async (img: Promise<FileUpload>, index: number): Promise<Promise<void>> => {
-		try {
-			const { filename, mimetype, encoding, createReadStream } = await img;
+		const uploadedImages = [];
+		const promisedList = files.map(async (img: Promise<FileUpload>, index: number): Promise<Promise<void>> => {
+			try {
+				const { filename, mimetype, encoding, createReadStream } = await img;
 
-			const validMime = validMimeTypes.includes(mimetype);
-			if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
+				const validMime = validMimeTypes.includes(mimetype);
+				if (!validMime) throw new Error(Message.PROVIDE_ALLOWED_FORMAT);
 
-			const imageName = getSerialForImage(filename);
-			const url = `uploads/${target}/${imageName}`;
-			const stream = createReadStream();
+				const imageName = getSerialForImage(filename);
+				const url = `uploads/${target}/${imageName}`;
+				const stream = createReadStream();
 
-			const result = await new Promise((resolve, reject) => {
-				stream
-					.pipe(createWriteStream(url))
-					.on('finish', () => resolve(true))
-					.on('error', () => reject(false));
-			});
-			if (!result) throw new Error(Message.UPLOAD_FAILED);
+				const result = await new Promise((resolve, reject) => {
+					stream
+						.pipe(createWriteStream(url))
+						.on('finish', () => resolve(true))
+						.on('error', () => reject(false));
+				});
+				if (!result) throw new Error(Message.UPLOAD_FAILED);
 
-			uploadedImages[index] = url;
-		} catch (err) {
-			console.log('Error, file missing!');
-		}
-	});
+				uploadedImages[index] = url;
+			} catch (err) {
+				console.log('Error, file missing!');
+			}
+		});
 
-	await Promise.all(promisedList);
-	return uploadedImages;
-}
+		await Promise.all(promisedList);
+		return uploadedImages;
+	}
 }

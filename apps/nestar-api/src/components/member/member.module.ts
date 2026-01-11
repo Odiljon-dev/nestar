@@ -8,6 +8,7 @@ import { ViewModule } from '../view/view.module';
 
 @Module({
 	imports: [
+		// MEMBER SCHEMA MODULE
 		MongooseModule.forFeature([
 			{
 				name: 'Member',

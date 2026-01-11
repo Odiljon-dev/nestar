@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { InjectConnection, MongooseModule } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 
+// 2 ta Database bor bor bittasi develop uchun 2 chisida userlar uchun tashkillashtirganmiz
 @Module({
-	imports: [ 
+	imports: [
 		MongooseModule.forRootAsync({
 			useFactory: () => ({
 				uri: process.env.NODE_ENV === 'production' ? process.env.MONGO_PROD : process.env.MONGO_DEV,

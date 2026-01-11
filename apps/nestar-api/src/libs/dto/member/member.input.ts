@@ -4,6 +4,7 @@ import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enu
 import { avilableAgentSorts, avilableMemberSorts } from '../../config';
 import { Direction } from '../../enums/common.enum';
 
+// BU INPUTDAN KIRIB KELAYOTGAN MALUMOTNI TEKSHIRADI FILTIRLAYDI
 @InputType()
 export class MemberInput {
 	@IsNotEmpty()
@@ -81,7 +82,7 @@ class MISearch {
 	@Field(() => MemberStatus, { nullable: true })
 	memberStatus?: MemberStatus;
 
-    	@IsOptional()
+	@IsOptional()
 	@Field(() => MemberType, { nullable: true })
 	memberType?: MemberType;
 

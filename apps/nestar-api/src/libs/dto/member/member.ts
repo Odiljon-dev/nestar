@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
 import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enum';
 
+// BU CHIQIB KETAYOTGAN RESPONSENI FILTIRLAYDIthhhgg
 @ObjectType()
 export class Member {
 	@Field(() => String)
