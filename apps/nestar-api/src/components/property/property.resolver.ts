@@ -1,7 +1,12 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PropertyService } from './property.service';
 import { Properties, Property } from '../../libs/dto/property/property';
-import { AgentPropertiesInquiry, AllPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import {
+	AgentPropertiesInquiry,
+	AllPropertiesInquiry,
+	PropertiesInquiry,
+	PropertyInput,
+} from '../../libs/dto/property/property.input';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { MemberType } from '../../libs/enums/member.enum';
@@ -40,7 +45,7 @@ export class PropertyResolver {
 	}
 
 	@Roles(MemberType.AGENT)
-		@UseGuards(RolesGuard)
+	@UseGuards(RolesGuard)
 	@Mutation((returns) => Property)
 	public async updateProperty(
 		@Args('input') input: PropertyUpdate,
@@ -51,7 +56,7 @@ export class PropertyResolver {
 		return await this.propertyService.updateProperty(memberId, input);
 	}
 
-		@UseGuards(WithoutGuard)
+	@UseGuards(WithoutGuard)
 	@Query((returns) => Properties)
 	public async getProperties(
 		@Args('input') input: PropertiesInquiry,
@@ -62,7 +67,7 @@ export class PropertyResolver {
 	}
 
 	@Roles(MemberType.AGENT)
-		@UseGuards(RolesGuard)
+	@UseGuards(RolesGuard)
 	@Query((returns) => Properties)
 	public async getAgentProperties(
 		@Args('input') input: AgentPropertiesInquiry,
@@ -75,7 +80,7 @@ export class PropertyResolver {
 	/** ADMIN **/
 
 	@Roles(MemberType.ADMIN)
-		@UseGuards(RolesGuard)
+	@UseGuards(RolesGuard)
 	@Query((returns) => Properties)
 	public async getAllPropertiesByAdmin(
 		@Args('input') input: AllPropertiesInquiry,
@@ -85,4 +90,12 @@ export class PropertyResolver {
 		return await this.propertyService.getAllPropertiesByAdmin(input);
 	}
 
+	@Roles(MemberType.ADMIN)
+	@UseGuards(RolesGuard)
+	@Mutation((returns) => Property)
+	public async updatePropertyByAdmin(@Args('input') input: PropertyUpdate): Promise<Property> {
+		console.log('Mutation: updatePropertyByAdmin');
+		input._id = shapeIntoMongoObjectId(input._id);
+		return await this.propertyService.updatePropertyByAdmin(input);
+	}
 }
