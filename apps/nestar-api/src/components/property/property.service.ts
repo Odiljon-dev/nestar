@@ -16,7 +16,7 @@ import { ViewGroup } from '../../libs/enums/view.enum';
 import { ViewService } from '../view/view.service';
 import { PropertyUpdate } from '../../libs/dto/property/propert.update';
 import * as moment from 'moment';
-import { lookupMembber, shapeIntoMongoObjectId } from '../../libs/config';
+import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 
 @Injectable()
 export class PropertyService {
@@ -61,21 +61,7 @@ export class PropertyService {
 		return targetProperty;
 	}
 
-	public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
-		const { _id, targetKey, modifier } = input;
-		return (
-			await this,
-			this.propertyModel
-				.findOneAndUpdate(
-					_id,
-					{ $inc: { [targetKey]: modifier } },
-					{
-						new: true,
-					},
-				)
-				.exec()
-		);
-	}
+	
 
 	public async updateProperty(memberId: ObjectId, input: PropertyUpdate): Promise<Property> {
 		let { propertyStatus, soldAt, deletedAt } = input;
@@ -122,7 +108,7 @@ export class PropertyService {
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
 							// meLiked
-							lookupMembber,
+							lookupMember,
 							{ $unwind: '$memberData' },
 						],
 						metaCounter: [{ $count: 'total' }],
@@ -184,7 +170,7 @@ export class PropertyService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
-							lookupMembber,
+							lookupMember,
 							{ $unwind: '$memberData' },
 						],
 						metaCounter: [{ $count: 'total' }],
@@ -213,7 +199,7 @@ export class PropertyService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit }, // [property1. property2]
-							lookupMembber, // memberData: [MemberDataValue]
+							lookupMember, // memberData: [MemberDataValue]
 							{ $unwind: '$memberData' }, // memberData: MemberDataValue
 						],
 						metaCounter: [{ $count: 'total' }],
@@ -258,5 +244,20 @@ export class PropertyService {
 		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
 
 		return result;
+	}
+	public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
+		const { _id, targetKey, modifier } = input;
+		return (
+			await this,
+			this.propertyModel
+				.findOneAndUpdate(
+					_id,
+					{ $inc: { [targetKey]: modifier } },
+					{
+						new: true,
+					},
+				)
+				.exec()
+		);
 	}
 }

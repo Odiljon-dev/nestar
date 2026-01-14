@@ -27,7 +27,7 @@ export const shapeIntoMongoObjectId = (target: any) => {
 	return typeof target === 'string' ? new ObjectId(target) : target;
 };
 
-export const lookupMembber = {
+export const lookupMember = {
 	$lookup: {
 		from: 'members',
 		localField: 'memberId',
