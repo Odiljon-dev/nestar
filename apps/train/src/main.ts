@@ -116,3 +116,21 @@ function findDuplicates(array) {
 }
 
 console.log(findDuplicates([1, 2, 3, 4, 5, 4, 3, 4]));
+//////////////////////////////////////////////////////
+// TASK_ZR
+function countNumberAndLetters(strring) {
+	let number = 0;
+	let letter = 0;
+
+	for (const char of strring) {
+		if (!isNaN(char) && char !== ' ') {
+			number++;
+		} else if (/[a-zA-Z]/.test(char)) {
+			letter++;
+		}
+	}
+
+	return { number, letter };
+}
+
+console.log(countNumberAndLetters('string152%¥'));
