@@ -61,8 +61,6 @@ export class PropertyService {
 		return targetProperty;
 	}
 
-	
-
 	public async updateProperty(memberId: ObjectId, input: PropertyUpdate): Promise<Property> {
 		let { propertyStatus, soldAt, deletedAt } = input;
 		const search: T = {
@@ -247,17 +245,14 @@ export class PropertyService {
 	}
 	public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
 		const { _id, targetKey, modifier } = input;
-		return (
-			await this,
-			this.propertyModel
-				.findOneAndUpdate(
-					_id,
-					{ $inc: { [targetKey]: modifier } },
-					{
-						new: true,
-					},
-				)
-				.exec()
-		);
+		return await this.propertyModel
+			.findByIdAndUpdate(
+				_id,
+				{ $inc: { [targetKey]: modifier } },
+				{
+					new: true,
+				},
+			)
+			.exec();
 	}
 }

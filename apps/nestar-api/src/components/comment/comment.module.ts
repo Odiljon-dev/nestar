@@ -8,6 +8,7 @@ import { MemberModule } from '../member/member.module';
 import { PropertyModule } from '../property/property.module';
 import { BoardArticle } from '../../libs/dto/board-article/board-article';
 import { BoardArticleModule } from '../board-article/board-article.module';
+import { ViewModule } from '../view/view.module';
 
 @Module({
 	imports: [
@@ -20,8 +21,10 @@ import { BoardArticleModule } from '../board-article/board-article.module';
 		AuthModule,
 		MemberModule,
 		PropertyModule,
+        ViewModule,
 		BoardArticleModule,
 	],
 	providers: [CommentResolver, CommentService],
+	exports: [CommentService],
 })
 export class CommentModule {}
