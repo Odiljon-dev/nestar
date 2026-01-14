@@ -107,4 +107,6 @@ export class PropertyResolver {
 		const propertyId = shapeIntoMongoObjectId(input);
 		return await this.propertyService.removePropertyByAdmin(propertyId);
 	}
+
+	
 }
