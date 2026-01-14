@@ -21,6 +21,7 @@ import { T } from './types/common';
 			uploads: false, // Bunda biz agar file upload bo'ladigan bo'lsa uni o'chiramiz
 			autoSchemaFile: true, // Bu GraphQL schemani avtomatik generatsiya qiladi
 			formatError: (error: T) => {
+				// Standard errorga o'tkazyabmiz
 				const graphQLFormattedError = {
 					code: error?.extensions.code,
 					message:
