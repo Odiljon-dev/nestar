@@ -18,7 +18,7 @@ import { Message } from '../../libs/enums/common.enum';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) {} // DEPENDECIE IJECTION
+	constructor(private readonly memberService: MemberService) { } // DEPENDECIE IJECTION
 
 	@Mutation(() => Member) // GRAPHQL MEMBER MALUMOT QAYTARISH
 	public async signup(@Args('input') input: MemberInput): Promise<Member> {
