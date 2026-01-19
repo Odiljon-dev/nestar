@@ -15,8 +15,10 @@ import { T } from './types/common';
 	imports: [
 		ConfigModule.forRoot(), // envni hamma joyda ishlatadi
 		GraphQLModule.forRoot({
-			// GraphQl orqali o'zimizga kerakli malumotni olishimiz mumkin!
-			driver: ApolloDriver, // GraphQl orqali bir vaqtni o'zida bir nechta enpointyga request jo'natish mumkin!
+			// GRAPHQL API => REST API loyihamizni GRAPHQL API ga o'tkazyabdi!
+			// GRAPHQL =>  orqali o'zimizga kerakli malumotni olishimiz mumkin!
+			// GRAPHQL => orqali bir vaqtni o'zida bir nechta enpointyga request jo'natish mumkin!
+			driver: ApolloDriver,
 			playground: true, // Documention avtomatic qurib beradi
 			uploads: false, // Bunda biz agar file upload bo'ladigan bo'lsa uni o'chiramiz
 			autoSchemaFile: true, // Bu GraphQL schemani avtomatik generatsiya qiladi

@@ -20,28 +20,29 @@ import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 export class BoardArticleService {
 	constructor(
 		@InjectModel('BoardArticle') private readonly boardArticleModel: Model<BoardArticle>,
-		private memberService: MemberService,
+		private memberService: MemberService, 
 		private viewService: ViewService,
 	) {}
 
+	// DEFINE
 	public async createBoardArticle(memberId: ObjectId, input: BoardArticleInput): Promise<BoardArticle> {
-		input.memberId = memberId;
+		input.memberId = memberId; // AccessToken ichidan memberIdni oladi
 		try {
 			const result = await this.boardArticleModel.create(input);
 			await this.memberService.memberStatsEditor({
-				_id: memberId,
-				targetKey: 'memberArticle',
+				_id: memberId, // memberimizni statickasini oshirib beradi
+				targetKey: 'memberArticles',  // memberArticle targetKeyni 1 ga oshiradi
 				modifier: 1,
 			});
 			return result;
 		} catch (err) {
-			console.log('Error, Service.model:', err.message);
+			console.log('Error, Service.model:', err.message); // DATABASE VALIDATIONGA bogliq xatolik bo'lsa ishlaydi
 			throw new BadRequestException(Message.CREATE_FAILED);
 		}
 	}
 
 	public async getBoardArticle(memberId: ObjectId, articleId: ObjectId): Promise<BoardArticle> {
-		const search: T = {
+		const search: T = {    // Object search hosil qilyapmiz
 			_id: articleId,
 			articleStatus: BoardArticleStatus.ACTIVE,
 		};
@@ -49,10 +50,13 @@ export class BoardArticleService {
 		const targetBoardArticle: BoardArticle = await this.boardArticleModel.findOne(search).lean().exec();
 		if (!targetBoardArticle) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
-		if (memberId) {
+		// AGAR MUROJATCHI AUTHENTICED BOLGAN BOLSA BU MANTIQ ISHGA TUSHADI
+		// AGAR MUROJATCHI BIRINCHI MARTA BU VIEWNI KO'RAYOTGAN BOLSA NEW VIEW HOSIL BO'LADI
+		if (memberId) {                           
 			const viewInput = { memberId: memberId, viewRefId: articleId, viewGroup: ViewGroup.ARTICLE };
 			const newView = await this.viewService.recordView(viewInput);
 			if (newView) {
+				// HOSIL BO'LGAN NEW VIEWNI QIYMATINI BU YERDA 1 GA OSHIRADI
 				await this.boardArticleStatsEditor({ _id: articleId, targetKey: 'articleViews', modifier: 1 });
 				targetBoardArticle.articleViews++;
 			}
@@ -92,7 +96,8 @@ export class BoardArticleService {
 		if (articleCategory) match.articleCategory = articleCategory;
 		if (text) match.articleTitle = { $regex: new RegExp(text, 'i') };
 		if (input.search?.memberId) {
-			match.memberId = shapeIntoMongoObjectId(input.search.memberId);
+			// Ayni bir memberlarni articleni ko'rishni imkoni beradi 
+			match.memberId = shapeIntoMongoObjectId(input.search.memberId); 
 		}
 		console.log('match:', match);
 
@@ -102,6 +107,8 @@ export class BoardArticleService {
 				{ $sort: sort },
 				{
 					$facet: {
+						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN 
+						// DATABASEDAGI MALUMOTLAR SONI FARQLANGANI UCHUN
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
@@ -133,12 +140,15 @@ export class BoardArticleService {
 				{ $sort: sort },
 				{
 					$facet: {
+						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN 
+						// DATABASEDAGI MALUMOTLAR SONI FARQLANGANI UCHUN
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
 							lookupMember,
-							{ $unwind: '$memberData' },
+							{ $unwind: '$memberData' }, // ARTICLE xosil qilgan memberimizni malumotini member Dataga joylashtiryabmiz
 						],
+						// metaCounterni propertiylar soni qancahligini ko'rsatadi
 						metaCounter: [{ $count: 'total' }],
 					},
 				},

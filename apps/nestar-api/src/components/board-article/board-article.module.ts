@@ -12,14 +12,16 @@ import { ViewModule } from '../view/view.module';
 		MongooseModule.forFeature([
 			{
 				name: 'BoardArticle',
-				schema: BoardArticleSchema,
+				schema: BoardArticleSchema, // Schema nomi 
 			},
 		]),
-		AuthModule,
-		MemberModule,
-		ViewModule,
+		AuthModule, // // AUTH MODUL ga bog'liq narsani ixtiyoriy joyda chaqirib ishlatamiz
+		ViewModule, // VIEW MODUL ga bog'liq narsani ixtiyoriy joyda chaqirib ishlatamiz
+		MemberModule, // MEMBER MODUL ga bog'liq narsani ixtiyoriy joyda chaqirib ishlatamiz
 	],
-	providers: [BoardArticleResolver, BoardArticleService],
-    exports: [BoardArticleService],
+	providers: [
+		BoardArticleResolver, // Controller + Resolver
+		BoardArticleService], // BoardArticle Service
+	exports: [BoardArticleService], // BoardArticleni service export qilib service.ys chaqirib ishlatamiz
 })
 export class BoardArticleModule {}

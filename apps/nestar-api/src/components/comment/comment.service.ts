@@ -24,18 +24,18 @@ export class CommentService {
 	) {}
 
 	public async createComment(memberId: ObjectId, input: CommentInput): Promise<Comment> {
-		input.memberId = memberId;
+		input.memberId = memberId; // BU YERDA INPUTDAN BIZ MEMBER IDNI KIRITYABMIZ 
 
-		let result = null;
+		let result = null; // BU YERDA RESULTNI QIYMATINI NULL 
 
 		try {
 			result = await this.commentModel.create(input);
 		} catch (err) {
-			console.log('Error, Service.model:', err.message);
+			console.log('Error, Service.model:', err.message); // MONGODB ERRONI YUBORADI
 			throw new BadGatewayException(Message.CREATE_FAILED);
 		}
 
-		switch (input.commentGroup) {
+		switch (input.commentGroup) {  // SWITCH CASELARDAN FOYDAKANYABMIZ
 			case CommentGroup.PROPERTY:
 				await this.propertyService.propertyStatsEditor({
 					_id: input.commentRefId,
@@ -67,8 +67,8 @@ export class CommentService {
 		const { _id } = input;
 		const result = await this.commentModel.findOneAndUpdate(
 			{
-				_id: _id,
-				memberId: memberId,
+				_id: _id, // COMMENTIMIZNI ID 
+				memberId: memberId, // MUROJATCHIMIZNI IDSI
 				commentStatus: CommentStatus.ACTIVE,
 			},
 			input,

@@ -4,7 +4,6 @@ import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { CommentInput, CommentsInquiry } from '../../libs/dto/comment/comment.input';
-
 import { ObjectId } from 'mongoose';
 import { CommentUpdate } from '../../libs/dto/comment/comment.update';
 import { Comments, Comment } from '../../libs/dto/comment/comment';
@@ -18,42 +17,47 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 export class CommentResolver {
 	constructor(private readonly commentService: CommentService) {}
 
-	@UseGuards(AuthGuard)
+	//============ COMMENT YOZISH MANTIQ ==============//
+	@UseGuards(AuthGuard) // Authenticed bo'lgan murojat qila oladi
 	@Mutation((returns) => Comment)
-	public async createComment(
-		@Args('input') input: CommentInput,
-		@AuthMember('_id') memberId: ObjectId,
+	public async createComment( 
+		@Args('input') input: CommentInput, // INPUT TYPE YANI INPUTDAN KIRITILADIGAN MALUMOTLAR
+		@AuthMember('_id') memberId: ObjectId, // AUTHENTICED BO'LGAN MEMBERIMIZNI IDSINI OLYAMIZ
 	): Promise<Comment> {
 		console.log('Mutation: createComment');
 		return await this.commentService.createComment(memberId, input);
 	}
 
-	@UseGuards(AuthGuard)
+	//============ COMMENT NOMINI O"ZGARTIRISH MANTIQ ==============//
+	@UseGuards(AuthGuard) // Authenticed bo'lgan murojat qila oladi
 	@Mutation((returns) => Comment)
 	public async updateComment(
 		@Args('input') input: CommentUpdate,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Comment> {
 		console.log('Mutation: updateComment');
-		input._id = shapeIntoMongoObjectId(input._id);
+		input._id = shapeIntoMongoObjectId(input._id); // OBJECTIDGA AYLANTIRYABMIZ
 		return await this.commentService.updateComment(memberId, input);
 	}
 
-	@UseGuards(WithoutGuard)
+
+	//============  TARGETLARIMIZNI OLIB BERUVCHI MANTIQ ==============//
+	@UseGuards(WithoutGuard) // AUTHENTICED BO'LGAN BO'LMAGAN MEMBERLAR HAM MUROJAT QILADI OLADI
 	@Query((returns) => Comments)
 	public async getComments(
 		@Args('input') input: CommentsInquiry,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Comments> {
 		console.log('Query: getComments');
-		input.search.commentRefId = shapeIntoMongoObjectId(input.search.commentRefId);
+		input.search.commentRefId = shapeIntoMongoObjectId(input.search.commentRefId); // OBJECTIDGA AYLANTIRYABMIZ
 		const result = await this.commentService.getComments(memberId, input);
 		return result;
 	}
 
-    //** ADMIN **/
 
-    @Roles(MemberType.ADMIN)
+	
+    //** ADMIN **/
+    @Roles(MemberType.ADMIN) // BU YERDA ADMIN ISHLATA OLADIGAN GRAPHQL API
         @UseGuards(RolesGuard)
         @Mutation((returns) => Comment)
         public async removeCommentByAdmin(@Args('commentId') input: string): Promise<Comment> {

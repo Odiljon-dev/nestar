@@ -19,41 +19,41 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Resolver()
 export class BoardArticleResolver {
-	constructor(private readonly boardArticleService: BoardArticleService) {}
+	constructor(private readonly boardArticleService: BoardArticleService) {} // Interface olyabmiz
 
-	@UseGuards(AuthGuard)
-	@Mutation((returns) => BoardArticle)
+	@UseGuards(AuthGuard) // Authenticed bo'lgan 
+	@Mutation((returns) => BoardArticle) 
 	public async createBoardArticle(
-		@Args('input') input: BoardArticleInput,
-		@AuthMember('_id') memberId: ObjectId,
+		@Args('input') input: BoardArticleInput, // Input type 
+		@AuthMember('_id') memberId: ObjectId, //   Authenticed bo'lgan AccessTokendan olyabmiz
 	): Promise<BoardArticle> {
 		console.log('Mutation: createBoardArticle');
 		return await this.boardArticleService.createBoardArticle(memberId, input);
 	}
 
-	@UseGuards(WithoutGuard)
+	@UseGuards(WithoutGuard) // Authentication bo'lmasa ham ko'ra olish mumkin
 	@Query((returns) => BoardArticle)
 	public async getBoardArticle(
-		@Args('articleId') input: string,
+		@Args('articleId') input: string, // Kormoqchi bo'lgan memberimizni articleIdni olib beradi
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<BoardArticle> {
 		console.log('Query: getBoardArticle');
-		const articleId = shapeIntoMongoObjectId(input);
+		const articleId = shapeIntoMongoObjectId(input); // ObjectIdga tenglab olyapmiz
 		return await this.boardArticleService.getBoardArticle(memberId, articleId);
 	}
 
-	@UseGuards(AuthGuard)
+	@UseGuards(AuthGuard) // Authenticed bo'lgan 
 	@Mutation(() => BoardArticle)
 	public async updateBoardArticle(
 		@Args('input') input: BoardArticleUpdate,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<BoardArticle> {
 		console.log('Mutation: updateBoardArticle');
-		input._id = shapeIntoMongoObjectId(input._id);
+		input._id = shapeIntoMongoObjectId(input._id); // MongoObjectIdga aylantiryabmiz
 		return await this.boardArticleService.updateBoardArticle(memberId, input);
 	}
 
-	@UseGuards(WithoutGuard)
+	@UseGuards(WithoutGuard) // Authentication bo'lmasa ham kira olish mumkin
 	@Query((returns) => BoardArticles)
 	public async getBoardArticles(
 		@Args('input') input: BoardArticlesInquiry,
@@ -65,7 +65,7 @@ export class BoardArticleResolver {
 
 	/** ADMIN **/
 
-	@Roles(MemberType.ADMIN)
+	@Roles(MemberType.ADMIN) // Authorition bo'lgan odam yani uni Huquqi ham tekshiriladi
 	@UseGuards(RolesGuard)
 	@Query((returns) => BoardArticles)
 	public async getAllBoardArticlesByAdmin(
@@ -76,7 +76,8 @@ export class BoardArticleResolver {
 		return await this.boardArticleService.getAllBoardArticlesByAdmin(input);
 	}
 
-	@Roles(MemberType.ADMIN)
+	//========== TANLANGAN BOARD ARTICLENI UPDATE QILISH ===========//
+	@Roles(MemberType.ADMIN) // Authorition bo'lgan odam yani uni Huquqi ham tekshiriladi
 	@UseGuards(RolesGuard)
 	@Mutation((returns) => BoardArticle)
 	public async updateBoardArticleByAdmin(
@@ -88,7 +89,7 @@ export class BoardArticleResolver {
 		return await this.boardArticleService.updateBoardArticleByAdmin(input);
 	}
 
-	@Roles(MemberType.ADMIN)
+	@Roles(MemberType.ADMIN) // Authorition bo'lgan odam yani uni Huquqi ham tekshiriladi
 	@UseGuards(RolesGuard)
 	@Mutation((returns) => BoardArticle)
 	public async removeBoardArticleByAdmin(

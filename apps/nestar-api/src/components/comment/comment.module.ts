@@ -15,7 +15,7 @@ import { ViewModule } from '../view/view.module';
 		MongooseModule.forFeature([
 			{
 				name: 'Comment',
-				schema: CommentSchema,
+				schema: CommentSchema, // Schema nomi 
 			},
 		]),
 		AuthModule,

@@ -181,12 +181,12 @@ export class PropertyService {
 	}
 
 	public async getAllPropertiesByAdmin(input: AllPropertiesInquiry): Promise<Properties> {
-		const { propertyStatus, propertyLocationList } = input.search;
+		const { propertyStatus, propertyLocationList } = input.search; // DISTRACTION qilyapmiz
 		const match: T = {};
 		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
 
-		if (propertyStatus) match.propertyStatus = propertyStatus;
-		if (propertyLocationList) match.propertyLocation = { $in: propertyLocationList };
+		if (propertyStatus) match.propertyStatus = propertyStatus; // matchni propertyStatusni boyitib qo'yapmiz
+		if (propertyLocationList) match.propertyLocation = { $in: propertyLocationList }; // matchni propertyLocationList ni boyitadi
 
 		const result = await this.propertyModel
 			.aggregate([

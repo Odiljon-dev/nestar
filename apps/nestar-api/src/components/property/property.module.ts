@@ -14,12 +14,15 @@ import { MemberModule } from '../member/member.module';
 				name: 'Property',
 				schema: PropertySchema,
 			},
-		]),
+		]), // Schema model
 		AuthModule,
 		ViewModule,
 		MemberModule,
 	],
-	providers: [PropertyResolver, PropertyService],
-	exports: [PropertyService]
+	providers: [
+		PropertyResolver, // Controller + Resolver
+		PropertyService, // Service model
+	],
+	exports: [PropertyService],
 })
 export class PropertyModule {}
