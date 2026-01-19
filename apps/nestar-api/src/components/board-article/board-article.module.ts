@@ -13,7 +13,7 @@ import { LikeModule } from '../like/like.module';
 		MongooseModule.forFeature([
 			{
 				name: 'BoardArticle',
-				schema: BoardArticleSchema, // Schema nomi 
+				schema: BoardArticleSchema, // Schema nomi
 			},
 		]),
 		AuthModule, // // AUTH MODUL ga bog'liq narsani ixtiyoriy joyda chaqirib ishlatamiz
@@ -23,7 +23,8 @@ import { LikeModule } from '../like/like.module';
 	],
 	providers: [
 		BoardArticleResolver, // Controller + Resolver
-		BoardArticleService], // BoardArticle Service
+		BoardArticleService,
+	], // BoardArticle Service
 	exports: [BoardArticleService], // BoardArticleni service export qilib service.ys chaqirib ishlatamiz
 })
 export class BoardArticleModule {}

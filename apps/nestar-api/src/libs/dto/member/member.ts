@@ -82,10 +82,10 @@ export class Member {
 
 	@Field(() => String, { nullable: true })
 	accessToken?: string;
-	
+
 	/** from aggregatipon **/
 
-	@Field(() => [MeLiked], {nullable: true})
+	@Field(() => [MeLiked], { nullable: true })
 	meLiked?: MeLiked[];
 }
 

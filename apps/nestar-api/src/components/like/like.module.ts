@@ -4,16 +4,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LikeService } from './like.service';
 
 @Module({
-    imports: [
-        // LIKE SCHEMA MODULE
-        	MongooseModule.forFeature([
+	imports: [
+		// LIKE SCHEMA MODULE
+		MongooseModule.forFeature([
 			{
 				name: 'Like',
 				schema: LikeSchema,
 			},
 		]),
-    ],
-    providers: [LikeService],
-    exports:[LikeService],
+	],
+	providers: [LikeService],
+	exports: [LikeService],
 })
 export class LikeModule {}

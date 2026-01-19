@@ -15,13 +15,13 @@ import { ViewModule } from '../view/view.module';
 		MongooseModule.forFeature([
 			{
 				name: 'Comment',
-				schema: CommentSchema, // Schema nomi 
+				schema: CommentSchema, // Schema nomi
 			},
 		]),
 		AuthModule,
 		MemberModule,
 		PropertyModule,
-        ViewModule,
+		ViewModule,
 		BoardArticleModule,
 	],
 	providers: [CommentResolver, CommentService],

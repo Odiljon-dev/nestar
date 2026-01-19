@@ -20,7 +20,7 @@ export class CommentResolver {
 	//============ COMMENT YOZISH MANTIQ ==============//
 	@UseGuards(AuthGuard) // Authenticed bo'lgan murojat qila oladi
 	@Mutation((returns) => Comment)
-	public async createComment( 
+	public async createComment(
 		@Args('input') input: CommentInput, // INPUT TYPE YANI INPUTDAN KIRITILADIGAN MALUMOTLAR
 		@AuthMember('_id') memberId: ObjectId, // AUTHENTICED BO'LGAN MEMBERIMIZNI IDSINI OLYAMIZ
 	): Promise<Comment> {
@@ -40,7 +40,6 @@ export class CommentResolver {
 		return await this.commentService.updateComment(memberId, input);
 	}
 
-
 	//============  TARGETLARIMIZNI OLIB BERUVCHI MANTIQ ==============//
 	@UseGuards(WithoutGuard) // AUTHENTICED BO'LGAN BO'LMAGAN MEMBERLAR HAM MUROJAT QILADI OLADI
 	@Query((returns) => Comments)
@@ -54,15 +53,13 @@ export class CommentResolver {
 		return result;
 	}
 
-
-	
-    //** ADMIN **/
-    @Roles(MemberType.ADMIN) // BU YERDA ADMIN ISHLATA OLADIGAN GRAPHQL API
-        @UseGuards(RolesGuard)
-        @Mutation((returns) => Comment)
-        public async removeCommentByAdmin(@Args('commentId') input: string): Promise<Comment> {
-            console.log('Mutation: removeCommentByAdmin');
-            const commentId = shapeIntoMongoObjectId(input);
-            return await this.commentService.removeCommentByAdmin(commentId);
-        }
+	//** ADMIN **/
+	@Roles(MemberType.ADMIN) // BU YERDA ADMIN ISHLATA OLADIGAN GRAPHQL API
+	@UseGuards(RolesGuard)
+	@Mutation((returns) => Comment)
+	public async removeCommentByAdmin(@Args('commentId') input: string): Promise<Comment> {
+		console.log('Mutation: removeCommentByAdmin');
+		const commentId = shapeIntoMongoObjectId(input);
+		return await this.commentService.removeCommentByAdmin(commentId);
+	}
 }
