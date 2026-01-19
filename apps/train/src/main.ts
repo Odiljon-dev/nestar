@@ -134,3 +134,21 @@ function countNumberAndLetters(strring) {
 }
 
 console.log(countNumberAndLetters('string152%¥'));
+/////////////////////////////////////////////////////////
+// TASK_ZS
+
+function singleNumber(array) {
+  const count = {};
+
+  for (let num of array) {
+    count[num] = (count[num] || 0) + 1;
+  }
+
+  for (let key in count) {
+    if (count[key] === 1) {
+      return Number(key);
+    }
+  }
+}
+
+console.log(singleNumber([4, 2, 1, 2, 1])); 
