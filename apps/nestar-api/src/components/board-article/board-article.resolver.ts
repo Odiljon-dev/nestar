@@ -21,10 +21,10 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 export class BoardArticleResolver {
 	constructor(private readonly boardArticleService: BoardArticleService) {} // Interface olyabmiz
 
-	@UseGuards(AuthGuard) // Authenticed bo'lgan 
-	@Mutation((returns) => BoardArticle) 
+	@UseGuards(AuthGuard) // Authenticed bo'lgan
+	@Mutation((returns) => BoardArticle)
 	public async createBoardArticle(
-		@Args('input') input: BoardArticleInput, // Input type 
+		@Args('input') input: BoardArticleInput, // Input type
 		@AuthMember('_id') memberId: ObjectId, //   Authenticed bo'lgan AccessTokendan olyabmiz
 	): Promise<BoardArticle> {
 		console.log('Mutation: createBoardArticle');
@@ -42,7 +42,7 @@ export class BoardArticleResolver {
 		return await this.boardArticleService.getBoardArticle(memberId, articleId);
 	}
 
-	@UseGuards(AuthGuard) // Authenticed bo'lgan 
+	@UseGuards(AuthGuard) // Authenticed bo'lgan
 	@Mutation(() => BoardArticle)
 	public async updateBoardArticle(
 		@Args('input') input: BoardArticleUpdate,
@@ -61,6 +61,17 @@ export class BoardArticleResolver {
 	): Promise<BoardArticles> {
 		console.log('Mutation: getBoardArticles');
 		return await this.boardArticleService.getBoardArticles(memberId, input);
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation(() => BoardArticle)
+	public async likeTargetBoardArticle(
+		@Args('articleId') input: string,
+		@AuthMember('_id') memberId: ObjectId,
+	): Promise<BoardArticle> {
+		console.log('Mutation: likeTargetBoardArticle');
+		const likeRefId = shapeIntoMongoObjectId(input);
+		return await this.boardArticleService.likeTargetBoardArticle(memberId, likeRefId);
 	}
 
 	/** ADMIN **/

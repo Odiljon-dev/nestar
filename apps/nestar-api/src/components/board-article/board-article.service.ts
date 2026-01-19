@@ -15,13 +15,17 @@ import { StatisticModifier, T } from '../../types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { BoardArticleUpdate } from '../../libs/dto/board-article/board-article.update';
 import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { LikeService } from '../like/like.service';
+import { LikeInput } from '../../libs/dto/like/like.input';
+import { LikeGroup } from '../../libs/enums/like.enum';
 
 @Injectable()
 export class BoardArticleService {
 	constructor(
 		@InjectModel('BoardArticle') private readonly boardArticleModel: Model<BoardArticle>,
-		private memberService: MemberService, 
+		private memberService: MemberService,
 		private viewService: ViewService,
+		private likeService: LikeService,
 	) {}
 
 	// DEFINE
@@ -31,7 +35,7 @@ export class BoardArticleService {
 			const result = await this.boardArticleModel.create(input);
 			await this.memberService.memberStatsEditor({
 				_id: memberId, // memberimizni statickasini oshirib beradi
-				targetKey: 'memberArticles',  // memberArticle targetKeyni 1 ga oshiradi
+				targetKey: 'memberArticles', // memberArticle targetKeyni 1 ga oshiradi
 				modifier: 1,
 			});
 			return result;
@@ -42,7 +46,8 @@ export class BoardArticleService {
 	}
 
 	public async getBoardArticle(memberId: ObjectId, articleId: ObjectId): Promise<BoardArticle> {
-		const search: T = {    // Object search hosil qilyapmiz
+		const search: T = {
+			// Object search hosil qilyapmiz
 			_id: articleId,
 			articleStatus: BoardArticleStatus.ACTIVE,
 		};
@@ -52,7 +57,7 @@ export class BoardArticleService {
 
 		// AGAR MUROJATCHI AUTHENTICED BOLGAN BOLSA BU MANTIQ ISHGA TUSHADI
 		// AGAR MUROJATCHI BIRINCHI MARTA BU VIEWNI KO'RAYOTGAN BOLSA NEW VIEW HOSIL BO'LADI
-		if (memberId) {                           
+		if (memberId) {
 			const viewInput = { memberId: memberId, viewRefId: articleId, viewGroup: ViewGroup.ARTICLE };
 			const newView = await this.viewService.recordView(viewInput);
 			if (newView) {
@@ -96,8 +101,8 @@ export class BoardArticleService {
 		if (articleCategory) match.articleCategory = articleCategory;
 		if (text) match.articleTitle = { $regex: new RegExp(text, 'i') };
 		if (input.search?.memberId) {
-			// Ayni bir memberlarni articleni ko'rishni imkoni beradi 
-			match.memberId = shapeIntoMongoObjectId(input.search.memberId); 
+			// Ayni bir memberlarni articleni ko'rishni imkoni beradi
+			match.memberId = shapeIntoMongoObjectId(input.search.memberId);
 		}
 		console.log('match:', match);
 
@@ -107,7 +112,7 @@ export class BoardArticleService {
 				{ $sort: sort },
 				{
 					$facet: {
-						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN 
+						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN
 						// DATABASEDAGI MALUMOTLAR SONI FARQLANGANI UCHUN
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
@@ -126,6 +131,28 @@ export class BoardArticleService {
 		return result[0];
 	}
 
+	public async likeTargetBoardArticle(memberId: ObjectId, likeRefId: ObjectId): Promise<BoardArticle> {
+		const target: BoardArticle = await this.boardArticleModel
+			.findOne({ _id: likeRefId, articleStatus: BoardArticleStatus.ACTIVE })
+			.exec();
+		if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+		const input: LikeInput = {
+			memberId: memberId,
+			likeRefId: likeRefId,
+			likeGroup: LikeGroup.ARTICLE,
+		};
+		const modifier: number = await this.likeService.toggleLike(input);
+		const result = await this.boardArticleStatsEditor({
+			_id: likeRefId,
+			targetKey: 'articleLikes',
+			modifier: modifier,
+		});
+
+		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+		return result;
+	}
+
 	public async getAllBoardArticlesByAdmin(input: AllBoardArticlesInquiry): Promise<BoardArticles> {
 		const { articleStatus, articleCategory } = input.search;
 		const match: T = {};
@@ -140,7 +167,7 @@ export class BoardArticleService {
 				{ $sort: sort },
 				{
 					$facet: {
-						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN 
+						// BU YERDA 2 XIL PIPELINE QILISHIMIZNI SABABI 1 CHI PAGEMIZDAGI PROPERTIYLAR SONI BILAN
 						// DATABASEDAGI MALUMOTLAR SONI FARQLANGANI UCHUN
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
