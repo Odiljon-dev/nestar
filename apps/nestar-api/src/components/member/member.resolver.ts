@@ -18,7 +18,7 @@ import { Message } from '../../libs/enums/common.enum';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) {} // DEPENDECIE IJECTION
+	constructor(private readonly memberService: MemberService) { } // DEPENDECIE IJECTION
 
 	@Mutation(() => Member) // GRAPHQL MEMBER MALUMOT QAYTARISH
 	public async signup(@Args('input') input: MemberInput): Promise<Member> {
@@ -79,6 +79,17 @@ export class MemberResolver {
 		return await this.memberService.getAgents(memberId, input);
 	}
 
+	@UseGuards(AuthGuard)
+	@Mutation(() => Member)
+	public async likeTargetMember(
+		@Args("memberId") input: string,
+	    @AuthMember('_id') memberId: ObjectId, 
+	   ): Promise<Member> {
+       console.log('Mutation: likeTargetMember');
+	   const likeRefId = shapeIntoMongoObjectId(input);
+		return await this.memberService.likeTargetMember(memberId, likeRefId);
+	}
+
 	/** ADMIN **/
 
 	@Roles(MemberType.ADMIN)
@@ -103,7 +114,7 @@ export class MemberResolver {
 	@UseGuards(AuthGuard)
 	@Mutation((returns) => String)
 	public async imageUploader(
-		@Args({ name: 'file', type: () => GraphQLUpload }) 
+		@Args({ name: 'file', type: () => GraphQLUpload })
 		{ createReadStream, filename, mimetype }: FileUpload,
 		@Args('target') target: String,
 	): Promise<string> {
