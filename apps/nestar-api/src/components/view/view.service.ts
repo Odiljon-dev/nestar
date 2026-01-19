@@ -4,9 +4,13 @@ import { Model } from 'mongoose';
 import { View } from '../../libs/dto/view/view';
 import { ViewInput } from '../../libs/dto/view/view.input';
 import { T } from '../../types/common';
+import { LikeInput } from '../../libs/dto/like/like.input';
 
 @Injectable()
 export class ViewService {
+	toggleLike(input: LikeInput): number | PromiseLike<number> {
+		throw new Error('Method not implemented.');
+	}
 	constructor(@InjectModel('View') private readonly viewModule: Model<View>) {}
 
 	public async recordView(input: ViewInput): Promise<View | null> {
