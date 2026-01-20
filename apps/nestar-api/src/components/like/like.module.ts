@@ -13,7 +13,7 @@ import { LikeService } from './like.service';
 			},
 		]),
 	],
-	providers: [LikeService],
+	providers: [LikeService], // RESOLVERNI YOQLIGINI SABABINI BOSHQA MODULLAR UCHUN XIZMAT QILADI
 	exports: [LikeService],
 })
 export class LikeModule {}

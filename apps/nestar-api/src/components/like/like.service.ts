@@ -32,6 +32,7 @@ export class LikeService {
 		return modifier;
 	}
 
+	//========== OLDIN BU MEMBERGA LIKE BOSILGANMI YOQMI CHECK QILISH MANTIQ =========//
 	public async checkLikeExistence(input: LikeInput): Promise<MeLiked[]> {
 		const { memberId, likeRefId } = input;
 		const result = await this.likeModel.findOne({ memberId: memberId, likeRefId: likeRefId }).exec();

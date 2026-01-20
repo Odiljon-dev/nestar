@@ -86,6 +86,7 @@ export class MemberService {
 				targetMember.memberViews++;
 			}
 
+			// MEMBER OLDIN LIKE BOSGAN BO'LSA UNI MALUMOTLARAINI OLIB BERADI
 			const likeInput = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
 			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
 			// meFollowed
@@ -136,6 +137,8 @@ export class MemberService {
 			likeRefId: likeRefId,
 			likeGroup: LikeGroup.MEMBER,
 		};
+
+		//LIKE TOGGLE OLDIN BOSILGAN LIKENI DATABASE O'CHIRIB BERADI
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
 

@@ -2,6 +2,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { LikeGroup } from '../../enums/like.enum';
 import { ObjectId } from 'mongoose';
 
+
+// MALUM BIR TARGETGA LAYK BOSILGAN YOKI BOSILMAGANI ANIQLASH UCHUN XIZMAT QILADI
 @ObjectType()
 export class MeLiked {
 	@Field(() => String)
@@ -14,6 +16,7 @@ export class MeLiked {
 	myFavorite: boolean;
 }
 
+// LAYKLAR HOSIL BO'LGANDA XIZMAT QILADI
 @ObjectType()
 export class Like {
 	@Field(() => String)

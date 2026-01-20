@@ -79,7 +79,9 @@ export class MemberResolver {
 		return await this.memberService.getAgents(memberId, input);
 	}
 
-	@UseGuards(AuthGuard)
+
+	//================= MEMBERLARGA LAYK BOSISH UCHUN XIZMAT QILADI ===============//
+	@UseGuards(AuthGuard) // AUTHENTICED BO'LGAN MEMBERLAR ISHLATADI
 	@Mutation(() => Member)
 	public async likeTargetMember(
 		@Args('memberId') input: string,
