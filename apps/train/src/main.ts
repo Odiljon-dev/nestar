@@ -152,3 +152,22 @@ function singleNumber(array) {
 }
 
 console.log(singleNumber([4, 2, 1, 2, 1])); 
+////////////////////////////////////////////////////
+// TASK_ZT
+function firstUniqueCharIndex(string) {
+  const count = {};
+
+  for (let char of string) {
+    count[char] = (count[char] || 0) + 1;
+  }
+
+  for (let i = 0; i < string.length; i++) {
+    if (count[string[i]] === 1) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+console.log(firstUniqueCharIndex("stamp"));
