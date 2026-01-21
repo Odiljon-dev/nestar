@@ -63,21 +63,20 @@ export class LikeService {
 			{
 				$facet: {
 					list: [
-						{$skip: (page-1)*limit},
-						{$limit: limit},
+						{ $skip: (page - 1) * limit },
+						{ $limit: limit },
 						lookupFavorite,
 						{ $unwind: "$favoriteProperty.memberData" },
 					],
-					metaCounter: [{$count: 'total'}],
+					metaCounter: [{ $count: 'total' }],
 				},
 			},
 		])
-		.exec();
+			.exec();
 
 
-		const result: Properties = {list: [],  metaCounter: data[0].metaCounter};
+		const result: Properties = { list: [], metaCounter: data[0].metaCounter };
 		result.list = data[0].list.map((ele) => ele.favoriteProperty);
-
-;		return result;
+		return result;
 	}
 }
