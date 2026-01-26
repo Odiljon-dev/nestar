@@ -171,3 +171,21 @@ function firstUniqueCharIndex(string) {
 }
 
 console.log(firstUniqueCharIndex("stamp"));
+//////////////////////////////////////////////
+// TASK_ZU
+function sumOfUnique(array) {
+  const map = new Map();
+
+  array.forEach(num => {
+    map.set(num, (map.get(num) || 0) + 1);
+  });
+
+  let sum = 0;
+  map.forEach((count, num) => {
+    if (count === 1) sum += num;
+  });
+
+  return sum;
+}
+
+console.log(sumOfUnique([1, 2, 3, 2]));
