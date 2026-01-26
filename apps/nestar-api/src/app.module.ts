@@ -8,6 +8,7 @@ import { AppResolver } from './app.resolver';
 import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 import { T } from './types/common';
+import { SocketModule } from './socket/socket.module';
 
 // Module markaziy module hisoblanadi
 /** Bu yerda PROPERTYLAR birlashtirib turadi  **/
@@ -35,7 +36,7 @@ import { T } from './types/common';
 		}),
 		// COMPONENT HAMDA DATABASE MODULENI ROUTING QILMAGANIMIZNI SABABI BU BIZNING FILE MODULE BO'LGANI UCHUN
 		ComponentsModule, // HTTP barcha mantiqlarni bitta joyda saqlaydi!
-		DatabaseModule, // TCP connection bolgani uchun!
+		DatabaseModule, SocketModule, // TCP connection bolgani uchun!
 	],
 	controllers: [AppController], //RestApi!
 	providers: [AppService, AppResolver], //GraphQl-Api!
