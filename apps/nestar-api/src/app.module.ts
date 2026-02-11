@@ -36,7 +36,8 @@ import { SocketModule } from './socket/socket.module';
 		}),
 		// COMPONENT HAMDA DATABASE MODULENI ROUTING QILMAGANIMIZNI SABABI BU BIZNING FILE MODULE BO'LGANI UCHUN
 		ComponentsModule, // HTTP barcha mantiqlarni bitta joyda saqlaydi!
-		DatabaseModule, SocketModule, // TCP connection bolgani uchun!
+		DatabaseModule, // TCP connection bolgani uchun!
+		SocketModule, // TCP
 	],
 	controllers: [AppController], //RestApi!
 	providers: [AppService, AppResolver], //GraphQl-Api!

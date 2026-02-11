@@ -84,13 +84,13 @@ export class SquaraesRange {
 	@Field(() => Int)
 	start: number;
 
-	@Field(() => Date)
+	@Field(() => Int)
 	end: Date;
 }
 
 @InputType()
 export class PeriodsRange {
-	@Field(() => Int)
+	@Field(() => Date)
 	start: Date;
 
 	@Field(() => Date)

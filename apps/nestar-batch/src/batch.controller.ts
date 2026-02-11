@@ -38,7 +38,7 @@ export class BatchController {
 		}
 	}
 
-	@Cron("40 00 01 * * *", { name: BATCH_TOP_AGENTS })
+	@Cron("40 00 01  * * *", { name: BATCH_TOP_AGENTS })
 	public async batchAgents() {
 		try {
 			this.logger["context"] = BATCH_TOP_AGENTS;
