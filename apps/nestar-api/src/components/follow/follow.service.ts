@@ -23,10 +23,13 @@ export class FollowService {
 		const targetMember = await this.memberService.getMember(null, followingfId);
 		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
+		const existing = await this.followModel.findOne({ followerId, followingId: followingfId }).exec();
+		if (existing) return existing;
+
 		const result = await this.registerSubscription(followerId, followingfId);
 
-		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowing', modifier: 1 });
-		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowers', modifier: 1 });
+		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: 1 });
+		await this.memberService.memberStatsEditor({ _id: followingfId, targetKey: 'memberFollowers', modifier: 1 });
 		return result;
 	}
 
@@ -49,11 +52,11 @@ export class FollowService {
 		const result = await this.followModel.findOneAndDelete({
 			followingId: followingId,
 			followerId: followerId,
-		});
+		}).exec();
 		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: -1 });
-		await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowers', modifier: -1 });
+		await this.memberService.memberStatsEditor({ _id: followingId, targetKey: 'memberFollowers', modifier: -1 });
 		return result;
 	}
 
@@ -75,7 +78,7 @@ export class FollowService {
 							lookupAuthMemberLiked(memberId, "$followingId"),
 							lookupAuthMemberFollowed({ followerId: memberId, followingId: "$followingId" }),
 							lookupFollowingData,
-							{ $unwind: '$followingData' },
+							{ $unwind: { path: '$followingData', preserveNullAndEmptyArrays: true } },
 						],
 						metaCounter: [{ $count: 'total' }],
 					},
@@ -107,7 +110,7 @@ export class FollowService {
 							lookupAuthMemberLiked(memberId, "$followerId"),
 							lookupAuthMemberFollowed({ followerId: memberId, followingId: "$followerId" }),
 							lookupFollowerData,
-							{ $unwind: '$followerData' },
+							{ $unwind: { path: '$followerData', preserveNullAndEmptyArrays: true } },
 						],
 						metaCounter: [{ $count: 'total' }],
 					},

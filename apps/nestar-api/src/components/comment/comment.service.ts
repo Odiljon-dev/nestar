@@ -12,6 +12,7 @@ import { PropertyService } from '../property/property.service';
 import { CommentUpdate } from '../../libs/dto/comment/comment.update';
 import { T } from '../../types/common';
 import { lookupMember } from '../../libs/config';
+import { exec } from 'child_process';
 
 @Injectable()
 export class CommentService {
@@ -77,7 +78,7 @@ export class CommentService {
 			{
 				new: true,
 			},
-		);
+		).exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
 		return result;
 	}
@@ -104,7 +105,8 @@ export class CommentService {
 					metaCounter: [{ $count: 'total' }],
 				},
 			},
-		]);
+		])
+		.exec();
 		if (!result.length) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		return result[0];

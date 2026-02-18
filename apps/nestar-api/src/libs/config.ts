@@ -82,7 +82,7 @@ export const lookupAuthMemberFollowed = (input: LookupAuthMemberFollowed) => {
 					$match: {
 
 						$expr: {
-							$and: [{ $eq: ["$followerId", "$$localFollowerId"] }, { $eq: ["$followingfId", "$$localFollowingId"] }],
+							$and: [{ $eq: ["$followerId", "$$localFollowerId"] }, { $eq: ["$followingId", "$$localFollowingId"] }],
 						},
 					},
 				},

@@ -119,9 +119,9 @@ export class MemberService {
 				{
 					$facet: {
 						list: [{ $skip: (input.page - 1) * input.limit },
-							 { $limit: input.limit },
-							 lookupAuthMemberLiked(memberId),
-							],
+						{ $limit: input.limit },
+						lookupAuthMemberLiked(memberId),
+						],
 						metaCounter: [{ $count: 'total' }],
 					},
 				},
@@ -156,7 +156,6 @@ export class MemberService {
 		const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
 		if (memberStatus) match.memberStatus = memberStatus;
 		if (memberType) match.memberType = memberType;
-
 		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
 		console.log('match:', match);
 
